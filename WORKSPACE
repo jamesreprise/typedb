@@ -28,6 +28,12 @@ vaticle_dependencies()
 load("@vaticle_dependencies//builder/bazel:deps.bzl", "bazel_toolchain")
 bazel_toolchain()
 
+# Load //build/rust
+load("@vaticle_dependencies//builder/rust:deps.bzl", rust_deps = "deps")
+rust_deps()
+load("@rules_rust//rust:repositories.bzl", "rust_repositories")
+rust_repositories(version = "nightly", iso_date = "2021-07-01", edition="2018")
+
 # Load //builder/java
 load("@vaticle_dependencies//builder/java:deps.bzl", java_deps = "deps")
 java_deps()
@@ -130,6 +136,13 @@ vaticle_typeql()
 
 load("//dependencies/vaticle:artifacts.bzl", "vaticle_typedb_console_artifact")
 vaticle_typedb_console_artifact()
+
+################################
+# Load Rust Crate dependencies #
+################################
+
+load("@vaticle_dependencies//library/crates:crates.bzl", "raze_fetch_remote_crates")
+raze_fetch_remote_crates()
 
 ###############################################
 # Create @vaticle_typedb_workspace_refs #

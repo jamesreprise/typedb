@@ -36,26 +36,8 @@ bazel-*
 .classpath
 
 # Compiled
+target/
 dist/
-out/
-*.class
-
-# Package
-*.jarg
-*.war
-*.ear
-
-# Gradle
-.gradle/
-
-# Debug
-dep.tree
-
-# Databases
-db/
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml #
-hs_err_pid*
 
 # Log
 logs/
@@ -64,6 +46,3 @@ logs/
 # VIM swap
 *.swp
 *.swo
-
-# Python cache
-__pycache__

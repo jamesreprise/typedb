@@ -31,15 +31,14 @@ bazel_toolchain()
 # Load //builder/java
 load("@vaticle_dependencies//builder/java:deps.bzl", java_deps = "deps")
 java_deps()
-load("@vaticle_dependencies//library/maven:rules.bzl", "maven")
 
 # Load //builder/antlr
 load("@vaticle_dependencies//builder/antlr:deps.bzl", antlr_deps = "deps", "antlr_version")
 antlr_deps()
 
-load("@rules_antlr//antlr:lang.bzl", "JAVA")
+load("@rules_antlr//antlr:lang.bzl", "RUST")
 load("@rules_antlr//antlr:repositories.bzl", "rules_antlr_dependencies")
-rules_antlr_dependencies(antlr_version, JAVA)
+rules_antlr_dependencies(antlr_version, RUST)
 
 # Load //builder/kotlin
 load("@vaticle_dependencies//builder/kotlin:deps.bzl", kotlin_deps = "deps")
@@ -60,21 +59,14 @@ load("@vaticle_dependencies//builder/python:deps.bzl", python_deps = "deps")
 python_deps()
 
 # Load //tool/common
-load("@vaticle_dependencies//tool/common:deps.bzl", "vaticle_dependencies_ci_pip",
-    vaticle_dependencies_tool_maven_artifacts = "maven_artifacts")
+load("@vaticle_dependencies//tool/common:deps.bzl", "vaticle_dependencies_ci_pip", "maven_artifacts")
+load("@vaticle_dependencies//library/maven:rules.bzl", "maven")
 vaticle_dependencies_ci_pip()
+maven(maven_artifacts)
 
 # Load //tool/checkstyle
 load("@vaticle_dependencies//tool/checkstyle:deps.bzl", checkstyle_deps = "deps")
 checkstyle_deps()
-
-# Load //tool/sonarcloud
-load("@vaticle_dependencies//tool/sonarcloud:deps.bzl", "sonarcloud_dependencies")
-sonarcloud_dependencies()
-
-# Load //tool/unuseddeps
-load("@vaticle_dependencies//tool/unuseddeps:deps.bzl", unuseddeps_deps = "deps")
-unuseddeps_deps()
 
 # Load //distribution/docker
 load("@vaticle_dependencies//distribution/docker:deps.bzl", docker_deps = "deps")
@@ -121,38 +113,23 @@ pip_deps()
 
 # We don't load Maven artifacts for @vaticle_typedb_common as they are only needed
 # if you depend on @vaticle_typedb_common//test/server
-load("//dependencies/vaticle:repositories.bzl",
-"vaticle_typedb_common","vaticle_typeql_lang_java", "vaticle_typedb_protocol", "vaticle_factory_tracing", "vaticle_typedb_behaviour")
+load(
+    "//dependencies/vaticle:repositories.bzl",
+    "vaticle_typedb_common",
+    "vaticle_typeql_lang_rust",
+    "vaticle_typedb_protocol",
+    "vaticle_typedb_behaviour"
+)
 vaticle_typedb_common()
-vaticle_typeql_lang_java()
 vaticle_typedb_protocol()
-vaticle_factory_tracing()
 vaticle_typedb_behaviour()
+vaticle_typeql_lang_rust()
 
-load("@vaticle_typeql_lang_java//dependencies/vaticle:repositories.bzl", "vaticle_typeql")
+load("@vaticle_typeql_lang_rust//dependencies/vaticle:repositories.bzl", "vaticle_typeql")
 vaticle_typeql()
 
 load("//dependencies/vaticle:artifacts.bzl", "vaticle_typedb_console_artifact")
 vaticle_typedb_console_artifact()
-
-# Load maven artifacts
-load("@vaticle_typedb_common//dependencies/maven:artifacts.bzl", vaticle_typedb_common_artifacts = "artifacts")
-load("@vaticle_typeql_lang_java//dependencies/maven:artifacts.bzl", vaticle_typeql_lang_java_artifacts = "artifacts")
-load("@vaticle_typedb_protocol//dependencies/maven:artifacts.bzl", vaticle_typedb_protocol_artifacts = "artifacts")
-load("@vaticle_factory_tracing//dependencies/maven:artifacts.bzl", vaticle_factory_tracing_artifacts = "artifacts")
-load("//dependencies/maven:artifacts.bzl", vaticle_typedb_artifacts = "artifacts")
-
-############################
-# Load @maven dependencies #
-############################
-load("@vaticle_dependencies//library/maven:rules.bzl", "maven")
-maven(
-    vaticle_typedb_common_artifacts  +
-    vaticle_dependencies_tool_maven_artifacts +
-    vaticle_factory_tracing_artifacts +
-    vaticle_typeql_lang_java_artifacts +
-    vaticle_typedb_artifacts
-)
 
 ###############################################
 # Create @vaticle_typedb_workspace_refs #

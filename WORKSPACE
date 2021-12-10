@@ -121,10 +121,8 @@ pip_deps()
 # if you depend on @vaticle_typedb_common//test/server
 load(
     "//dependencies/vaticle:repositories.bzl",
-    "vaticle_typedb_common",
-    "vaticle_typeql_lang_rust",
-    "vaticle_typedb_protocol",
-    "vaticle_typedb_behaviour"
+    "vaticle_typedb_common", "vaticle_typeql_lang_rust",
+    "vaticle_typedb_protocol", "vaticle_typedb_behaviour"
 )
 vaticle_typedb_common()
 vaticle_typedb_protocol()
@@ -136,6 +134,14 @@ vaticle_typeql()
 
 load("//dependencies/vaticle:artifacts.bzl", "vaticle_typedb_console_artifact")
 vaticle_typedb_console_artifact()
+
+load(
+    "@vaticle_dependencies//library/ortools/cc:deps.bzl",
+    "google_or_tools_linux", "google_or_tools_mac", "google_or_tools_windows"
+)
+google_or_tools_linux()
+google_or_tools_mac()
+google_or_tools_windows()
 
 ################################
 # Load Rust Crate dependencies #

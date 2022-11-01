@@ -145,6 +145,7 @@ build:
 #        branch: [master, development]
 #      dependencies: [test-assembly-linux-targz]
       command: |
+        echo $PATH
         export PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH"
         pyenv install 3.7.15
         pyenv global 3.7.15
@@ -152,18 +153,18 @@ build:
         export DEPLOY_APT_PASSWORD=$REPO_VATICLE_PASSWORD
         bazel run --define version=$(git rev-parse HEAD) //server:deploy-apt -- snapshot
         bazel run --define version=$(git rev-parse HEAD) //:deploy-apt -- snapshot
-    test-deployment-apt:
-      image: vaticle-ubuntu-20.04 # use LTS for apt tests
-#      filter:
-#        owner: vaticle
-#        branch: [master, development]
-      dependencies: [deploy-apt-snapshot]
-      command: |
-        export PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH"
-        pyenv install 3.7.15
-        pyenv global 3.7.15
-        export TEST_DEPLOYMENT_APT_COMMIT=$FACTORY_COMMIT
-        bazel test //test/deployment:apt --action_env=TEST_DEPLOYMENT_APT_COMMIT --test_output=streamed
+#    test-deployment-apt:
+#      image: vaticle-ubuntu-20.04 # use LTS for apt tests
+##      filter:
+##        owner: vaticle
+##        branch: [master, development]
+#      dependencies: [deploy-apt-snapshot]
+#      command: |
+#        export PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH"
+#        pyenv install 3.7.15
+#        pyenv global 3.7.15
+#        export TEST_DEPLOYMENT_APT_COMMIT=$FACTORY_COMMIT
+#        bazel test //test/deployment:apt --action_env=TEST_DEPLOYMENT_APT_COMMIT --test_output=streamed
 release:
   filter:
     owner: vaticle

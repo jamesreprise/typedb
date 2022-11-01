@@ -139,7 +139,7 @@ build:
 #        bazel run --define version=$(git rev-parse HEAD) //:deploy-mac-zip -- snapshot
 #        bazel run --define version=$(git rev-parse HEAD) //:deploy-windows-zip -- snapshot
     deploy-apt-snapshot:
-      image: vaticle-ubuntu-22.04
+      image: vaticle-ubuntu-20.04
 #      filter:
 #        owner: vaticle
 #        branch: [master, development]

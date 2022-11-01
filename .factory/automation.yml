@@ -127,6 +127,9 @@ build:
 #        branch: [master, development]
       dependencies: [test-assembly-linux-targz]
       command: |
+        export PATH="/opt/pyenv/bin/pyenv:$PATH"
+        pyenv install 3.7.15
+        pyenv global 3.7.15
         export DEPLOY_ARTIFACT_USERNAME=$REPO_VATICLE_USERNAME
         export DEPLOY_ARTIFACT_PASSWORD=$REPO_VATICLE_PASSWORD
         bazel run --define version=$(git rev-parse HEAD) //server:deploy-linux-targz -- snapshot
@@ -142,6 +145,7 @@ build:
 #        branch: [master, development]
       dependencies: [test-assembly-linux-targz]
       command: |
+        export PATH="/opt/pyenv/bin/pyenv:$PATH"
         pyenv install 3.7.15
         pyenv global 3.7.15
         export DEPLOY_APT_USERNAME=$REPO_VATICLE_USERNAME
@@ -155,6 +159,7 @@ build:
 #        branch: [master, development]
       dependencies: [deploy-apt-snapshot]
       command: |
+        export PATH="/opt/pyenv/bin/pyenv:$PATH"
         pyenv install 3.7.15
         pyenv global 3.7.15
         export TEST_DEPLOYMENT_APT_COMMIT=$FACTORY_COMMIT

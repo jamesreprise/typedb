@@ -146,7 +146,8 @@ build:
 #      dependencies: [test-assembly-linux-targz]
       command: |
         echo $PATH
-        export PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH"
+        source /etc/profile.d/pyenv.sh
+        echo $PATH
         pyenv install 3.7.15
         pyenv global 3.7.15
         export DEPLOY_APT_USERNAME=$REPO_VATICLE_USERNAME

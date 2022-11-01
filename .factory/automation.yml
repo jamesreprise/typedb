@@ -145,6 +145,7 @@ build:
 #        branch: [master, development]
 #      dependencies: [test-assembly-linux-targz]
       command: |
+        sleep 3600
         echo $PATH
         pyenv install 3.7.15
         pyenv global 3.7.15

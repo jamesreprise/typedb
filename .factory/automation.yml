@@ -106,7 +106,7 @@ build:
 #        bazel test //test/behaviour/reasoner/tests/variable_roles:test --test_output=streamed
     test-assembly-linux-targz:
       image: vaticle-ubuntu-22.04
-      filter:
+#      filter:
 #        owner: vaticle
 #        branch: [master, development]
       dependencies: [build, build-dependency, test-unit, test-integration, test-behaviour-connection, test-behaviour-concept, test-behaviour-match, test-behaviour-writable, test-behaviour-definable, test-behaviour-reasoner]
@@ -114,7 +114,7 @@ build:
         bazel test //test/assembly:assembly --test_output=streamed
     test-assembly-docker:
       image: vaticle-ubuntu-22.04
-      filter:
+#      filter:
 #        owner: vaticle
 #        branch: [master, development]
       dependencies: [build, build-dependency, test-unit, test-integration, test-behaviour-connection, test-behaviour-concept, test-behaviour-match, test-behaviour-writable, test-behaviour-definable, test-behaviour-reasoner]
@@ -122,7 +122,7 @@ build:
         bazel test //test/assembly:docker --test_output=streamed
     deploy-artifact-snapshot:
       image: vaticle-ubuntu-22.04
-      filter:
+#      filter:
 #        owner: vaticle
 #        branch: [master, development]
       dependencies: [test-assembly-linux-targz]
@@ -137,7 +137,7 @@ build:
         bazel run --define version=$(git rev-parse HEAD) //:deploy-windows-zip -- snapshot
     deploy-apt-snapshot:
       image: vaticle-ubuntu-22.04
-      filter:
+#      filter:
 #        owner: vaticle
 #        branch: [master, development]
       dependencies: [test-assembly-linux-targz]
@@ -150,7 +150,7 @@ build:
         bazel run --define version=$(git rev-parse HEAD) //:deploy-apt -- snapshot
     test-deployment-apt:
       image: vaticle-ubuntu-20.04 # use LTS for apt tests
-      filter:
+#      filter:
 #        owner: vaticle
 #        branch: [master, development]
       dependencies: [deploy-apt-snapshot]

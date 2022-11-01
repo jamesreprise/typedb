@@ -143,7 +143,7 @@ build:
 #      filter:
 #        owner: vaticle
 #        branch: [master, development]
-      dependencies: [test-assembly-linux-targz]
+#      dependencies: [test-assembly-linux-targz]
       command: |
         export PATH="/opt/pyenv/bin/pyenv:/opt/pyenv/shims:$PATH"
         pyenv install 3.7.15

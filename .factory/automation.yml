@@ -145,8 +145,8 @@ build:
 #        branch: [master, development]
 #      dependencies: [test-assembly-linux-targz]
       command: |
+        export PYENV_ROOT="/opt/pyenv"
         pyenv install 3.7.15
-        pyenv init --path
         pyenv global 3.7.15
         export DEPLOY_APT_USERNAME=$REPO_VATICLE_USERNAME
         export DEPLOY_APT_PASSWORD=$REPO_VATICLE_PASSWORD

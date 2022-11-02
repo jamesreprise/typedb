@@ -148,8 +148,6 @@ build:
         export PYENV_ROOT="/opt/pyenv"
         pyenv install 3.7.15
         pyenv global 3.7.15
-#        sudo unlink /usr/bin/python3
-#        sudo ln -s $(which python3) /usr/bin/python3
         export DEPLOY_APT_USERNAME=$REPO_VATICLE_USERNAME
         export DEPLOY_APT_PASSWORD=$REPO_VATICLE_PASSWORD
         bazel run --define version=$(git rev-parse HEAD) //server:deploy-apt -- snapshot

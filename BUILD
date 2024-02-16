@@ -27,8 +27,8 @@ load("@vaticle_dependencies//distribution:deployment.bzl", "deployment")
 load("@vaticle_dependencies//distribution/artifact:rules.bzl", "artifact_repackage")
 load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 load("@vaticle_dependencies//tool/release/deps:rules.bzl", "release_validate_deps")
-load("@io_bazel_rules_docker//container:image.bzl", docker_container_image = "container_image")
-load("@io_bazel_rules_docker//container:container.bzl", docker_container_push = "container_push")
+
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_push")
 
 exports_files(
     ["VERSION", "deployment.bzl", "LICENSE", "README.md"],
@@ -357,13 +357,12 @@ release_validate_deps(
     tags = ["manual"]  # in order for bazel test //... to not fail
 )
 
-docker_container_image(
+oci_image(
     name = "assemble-docker",
     base = "@vaticle_ubuntu_image//image",
     tars = [":assemble-linux-x86_64-targz"],
-    directory = "opt",
     workdir = "/opt/typedb-all-linux-x86_64",
-    ports = ["1729"],
+    exposed_ports = ["1729"],
     env = {
         "LANG": "C.UTF-8",
         "LC_ALL": "C.UTF-8",
@@ -373,28 +372,26 @@ docker_container_image(
     visibility = ["//test:__subpackages__"],
 )
 
-docker_container_push(
+oci_push(
     name = "deploy-docker-release-overwrite-latest-tag",
     image = ":assemble-docker",
-    format = "Docker",
-    registry = deployment_docker["docker.index"],
-    repository = "{}/{}".format(
+    repository = "{}/{}/{}".format(
+        deployment_docker["docker.index"],
         deployment_docker["docker.organisation"],
-        deployment_docker["docker.release.repository"],
+        deployment_docker["docker.release.repository"]
     ),
-    tag = "latest"
+    remote_tags = ["latest"]
 )
 
-docker_container_push(
+oci_push(
     name = "deploy-docker-release",
     image = ":assemble-docker",
-    format = "Docker",
-    registry = deployment_docker["docker.index"],
-    repository = "{}/{}".format(
+    repository = "{}/{}/{}".format(
+        deployment_docker["docker.index"],
         deployment_docker["docker.organisation"],
-        deployment_docker["docker.release.repository"],
+        deployment_docker["docker.release.repository"]
     ),
-    tag_file = ":VERSION",
+    remote_tags = [":VERSION"]
 )
 
 checkstyle_test(

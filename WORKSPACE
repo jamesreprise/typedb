@@ -113,33 +113,23 @@ uploader_deps()
 load("@vaticle_bazel_distribution_uploader//:requirements.bzl", install_uploader_deps = "install_deps")
 install_uploader_deps()
 
-######################################
-# Load @vaticle_dependencies//distribution/docker #
-######################################
+######################################################
+# Load @vaticle_dependencies//distribution/container #
+######################################################
 
-# must be loaded after `vaticle_bazel_distribution` to ensure
-# `rules_pkg` is correctly patched (bazel-distribution #251)
+# Load //distribution/container
+load("@vaticle_dependencies//distribution/container:deps.bzl", container_deps = "deps")
+container_deps()
 
-# Load //distribution/docker
-load("@vaticle_dependencies//distribution/docker:deps.bzl", docker_deps = "deps")
-docker_deps()
+load("@rules_oci//oci:dependencies.bzl", "rules_oci_dependencies")
 
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
-go_rules_dependencies()
-go_register_toolchains(version = "1.18.3")
-gazelle_dependencies()
+rules_oci_dependencies()
 
-load("@io_bazel_rules_docker//repositories:repositories.bzl", bazel_rules_docker_repositories = "repositories")
-bazel_rules_docker_repositories()
-
-load("@io_bazel_rules_docker//repositories:deps.bzl", bazel_rules_docker_container_deps = "deps")
-bazel_rules_docker_container_deps()
-
-load("@io_bazel_rules_docker//container:container.bzl", "container_pull")
-container_pull(
+load("//:deployment.bzl","deployment")
+load("@rules_oci//oci:pull.bzl", "oci_pull")
+oci_pull(
   name = "vaticle_ubuntu_image",
-  registry = "index.docker.io",
+  registry = deployment["docker.index"],
   repository = "vaticle/ubuntu",
   tag = "4ee548cea883c716055566847c4736a7ef791c38"
 )
@@ -178,9 +168,9 @@ maven(
 load("@maven//:compat.bzl", "compat_repositories")
 compat_repositories()
 
-###############################################
+#########################################
 # Create @vaticle_typedb_workspace_refs #
-###############################################
+#########################################
 
 load("@vaticle_bazel_distribution//common:rules.bzl", "workspace_refs")
 workspace_refs(name = "vaticle_typedb_workspace_refs")
